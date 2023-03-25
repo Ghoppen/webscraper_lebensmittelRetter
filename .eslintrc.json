@@ -14,5 +14,6 @@
         "sourceType": "module"
     },
     "rules": {
+        "newline-per-chained-call":"warn"
     }
 }
