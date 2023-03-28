@@ -1,9 +1,13 @@
+import playwright, { Page } from 'playwright';
+import cheerioModule from 'cheerio';
+import FoodLocationData from './model/foodLocationData';
 import configuration from './config/configuration';
 import CookieParam from './model/cookieParam';
-import playwright, { Page } from 'playwright';
-//import cheerioModule from 'cheerio';
+import { headerEquals } from './helpers/equalityHeaderCheck';
 
 const config = configuration;
+
+const TABLE_ROW_SELECTOR = 'table > tbody > tr';
 
 async function login(loginPage: Page) {
   const USERNAME_SELECTOR = '#username-4';
@@ -89,23 +93,67 @@ async function goToDistributions(mainPage: Page) {
   return mainPage;
 }
 
-async function extractTableRows(dataPage: Page) {
-  const tableDataSelector = 'table > tbody > tr';
-  /*
-  dataPage.content().then((content) => {
-    const $ = cheerioModule.load(content);
-    const arra = [];
-    $(tableDataSelector).each((index, element) => {
-      const replacedString = $(element).text()[0].toString().trim();
-      console.log(replacedString);
+function mapAllFoodLocations(jqueryRoot: cheerio.Root): FoodLocationData[] {
+  const foodLocations: FoodLocationData[] = [];
 
-      arra.push(replacedString);
-    });
-  });*/
+  jqueryRoot(TABLE_ROW_SELECTOR).each((index, element) => {
+    const tableDataRow = jqueryRoot(element).find('td');
+
+    //first index is ussually table headers that is why this if check is present
+    if (index == 0) return true;
+
+    foodLocations.push(mapToFoodLocation(tableDataRow, jqueryRoot));
+  });
+  return foodLocations;
+}
+
+function mapToFoodLocation(
+  tableDataRow: cheerio.Cheerio,
+  jqueryRoot: cheerio.Root
+): FoodLocationData {
+  const mappedRow: FoodLocationData = {
+    dateTime: jqueryRoot(tableDataRow[0]).text(),
+    empty: jqueryRoot(tableDataRow[1]).text(),
+    location: jqueryRoot(tableDataRow[2]).text(),
+    helper: jqueryRoot(tableDataRow[3]).text(),
+    isBigAmount: jqueryRoot(tableDataRow[4]).text(),
+    extraDistribution: jqueryRoot(tableDataRow[5]).text(),
+  };
+
+  return mappedRow;
+}
+
+function isHeadersValid(jquery: cheerio.Root): Boolean {
+  var isHeadersEqual: Boolean = false;
+
+  jquery(TABLE_ROW_SELECTOR).each((_, tableRows) => {
+    const tableHeaderRow = jquery(tableRows).find('th');
+    const newHeader = mapToFoodLocation(tableHeaderRow, jquery);
+
+    isHeadersEqual = headerEquals(newHeader);
+  });
+  return isHeadersEqual;
+}
+
+async function extractTableRows(dataPage: Page) {
+  const dataHTML = dataPage.content();
+
+  dataHTML.then((content) => {
+    const $ = cheerioModule.load(content);
+
+    if (!isHeadersValid($)) {
+      console.log('Headers are not equal');
+    }
+
+    const foodLocations: FoodLocationData[] = mapAllFoodLocations($);
+    console.log(foodLocations);
+
+    return foodLocations;
+  });
 }
 
 setupPlaywright()
   .then((mainPage) => goToLoginPage(mainPage))
   .then((loginPage) => login(loginPage))
-  .then((mainPage) => goToDistributions(mainPage));
-/// .then((dataPage) => extractTableRows(dataPage));
+  .then((mainPage) => goToDistributions(mainPage))
+  .then((dataPage) => extractTableRows(dataPage));

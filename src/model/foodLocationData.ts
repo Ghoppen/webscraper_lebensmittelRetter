@@ -1,5 +1,10 @@
 interface FoodLocationData {
-  city: string;
-  time: number;
-  currentSpaces: number;
+  dateTime: string;
+  empty: string;
+  location: string;
+  helper: string;
+  isBigAmount: string;
+  extraDistribution: string;
 }
+
+export default FoodLocationData;
