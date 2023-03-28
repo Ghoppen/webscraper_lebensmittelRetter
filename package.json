@@ -12,9 +12,12 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/cheerio": "^0.22.31",
+    "@types/dotenv": "^8.2.0",
     "@types/node": "^18.15.9",
+    "@types/puppeteer": "^7.0.4",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.0.3",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-react-app": "^7.0.1",
@@ -24,6 +27,10 @@
     "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.7",
+    "puppeteer": "^19.8.0",
     "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "playwright": "^1.32.1"
   }
 }
