@@ -1,5 +1,5 @@
 const citiesToBeFiltered: FilterOptions = {
-  cities: ['Gröbenzell'],
+  cities: ['Gröbenzell', 'Olching Bahnhof'],
 };
 
 export { citiesToBeFiltered };

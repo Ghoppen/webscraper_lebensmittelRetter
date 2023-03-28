@@ -30,12 +30,24 @@ class TableDataExtractor {
     jqueryRoot: cheerio.Root
   ): FoodLocationData {
     const mappedRow: FoodLocationData = {
-      dateTime: jqueryRoot(tableDataRow[0]).text(),
-      empty: jqueryRoot(tableDataRow[1]).text(),
-      location: jqueryRoot(tableDataRow[2]).text(),
-      helper: jqueryRoot(tableDataRow[3]).text(),
-      isBigAmount: jqueryRoot(tableDataRow[4]).text(),
-      extraDistribution: jqueryRoot(tableDataRow[5]).text(),
+      dateTime: jqueryRoot(tableDataRow[0]).text().trim(),
+      empty: jqueryRoot(tableDataRow[1])
+        .text()
+        .replaceAll('\n', '')
+        .replaceAll('\t', '')
+        .trim(),
+      location: jqueryRoot(tableDataRow[2]).text().trim(),
+      helper: jqueryRoot(tableDataRow[3]).text().trim(),
+      isBigAmount: jqueryRoot(tableDataRow[4])
+        .text()
+        .replaceAll('\n', '')
+        .replaceAll('\t', '')
+        .trim(),
+      extraDistribution: jqueryRoot(tableDataRow[5])
+        .text()
+        .replaceAll('\n', '')
+        .replaceAll('\t', '')
+        .trim(),
     };
 
     return mappedRow;
@@ -44,11 +56,13 @@ class TableDataExtractor {
   private isHeadersValid(jquery: cheerio.Root): Boolean {
     var isHeadersEqual: Boolean = false;
 
-    jquery(this.rowSelector).each((_, tableRows) => {
-      const tableHeaderRow = jquery(tableRows).find('th');
-      const newHeader = this.mapToFoodLocation(tableHeaderRow, jquery);
+    jquery(this.rowSelector).each((index, tableRows) => {
+      if (index == 0) {
+        const tableHeaderRow = jquery(tableRows).find('th');
+        const newHeader = this.mapToFoodLocation(tableHeaderRow, jquery);
 
-      isHeadersEqual = headerEquals(newHeader);
+        isHeadersEqual = headerEquals(newHeader);
+      }
     });
     return isHeadersEqual;
   }
@@ -64,7 +78,6 @@ class TableDataExtractor {
       }
 
       const foodLocations: FoodLocationData[] = this.mapAllFoodLocations($);
-      console.log(foodLocations);
 
       return foodLocations;
     });
