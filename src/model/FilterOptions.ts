@@ -1,0 +1,3 @@
+interface FilterOptions {
+  cities?: string[];
+}

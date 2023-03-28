@@ -1,8 +1,8 @@
 import { Page } from 'playwright';
 import cheerioModule from 'cheerio';
-import FoodLocationData from '../model/foodLocationData';
 
 import { headerEquals } from '../helpers/equalityHeaderCheck';
+import { citiesToBeFiltered } from '../config/filterOptions';
 
 class TableDataExtractor {
   rowSelector: string;
@@ -68,6 +68,19 @@ class TableDataExtractor {
 
       return foodLocations;
     });
+  }
+
+  async filterFoodlocations(
+    foodLocations: FoodLocationData[],
+    options: FilterOptions
+  ): Promise<FoodLocationData[]> {
+    return foodLocations.filter((el) => options.cities?.includes(el.location));
+  }
+
+  async extractAndFilter(dataPage: Page): Promise<FoodLocationData[]> {
+    return this.extract(dataPage).then((foodLocations) =>
+      this.filterFoodlocations(foodLocations, citiesToBeFiltered)
+    );
   }
 }
 

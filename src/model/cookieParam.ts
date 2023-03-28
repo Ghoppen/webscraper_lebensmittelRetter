@@ -4,5 +4,3 @@ interface CookieParam {
   domain?: string;
   url?: string;
 }
-
-export default CookieParam;

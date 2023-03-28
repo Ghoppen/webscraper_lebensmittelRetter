@@ -1,7 +1,6 @@
 import playwright, { Page } from 'playwright';
 
 import { url_configuration } from './configuration';
-import CookieParam from '../model/cookieParam';
 import { bannerCookie } from '../constants/cookieBanner';
 
 const config = url_configuration;

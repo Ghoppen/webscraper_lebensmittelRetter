@@ -1,5 +1,4 @@
 import { tableHeaderMap } from '../constants/tableHeader';
-import FoodLocationData from '../model/foodLocationData';
 
 function headerEquals(other: FoodLocationData): Boolean {
   if (

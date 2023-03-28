@@ -6,5 +6,3 @@ interface FoodLocationData {
   isBigAmount: string;
   extraDistribution: string;
 }
-
-export default FoodLocationData;

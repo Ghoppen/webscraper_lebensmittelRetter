@@ -1,4 +1,3 @@
-import CookieParam from '../model/cookieParam';
 import { url_configuration } from '../config/configuration';
 
 const bannerCookie: CookieParam = {
