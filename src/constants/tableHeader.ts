@@ -1,5 +1,3 @@
-import FoodLocationData from '../model/foodLocationData';
-
 const tableHeaderMap: FoodLocationData = {
   dateTime: 'Datum Uhrzeit',
   empty: 'Frei',
