@@ -14,4 +14,22 @@ function headerEquals(other: FoodLocationData): Boolean {
   return true;
 }
 
-export { headerEquals };
+function compareFoodLocations(
+  firstFoodLocation: FoodLocationData,
+  secondFoodLocation: FoodLocationData
+): Boolean {
+  if (
+    firstFoodLocation.dateTime != secondFoodLocation.dateTime ||
+    firstFoodLocation.empty != secondFoodLocation.empty ||
+    firstFoodLocation.extraDistribution !=
+      secondFoodLocation.extraDistribution ||
+    firstFoodLocation.helper != secondFoodLocation.helper ||
+    firstFoodLocation.isBigAmount != secondFoodLocation.isBigAmount ||
+    firstFoodLocation.location != secondFoodLocation.location
+  ) {
+    return false;
+  }
+  return true;
+}
+
+export { headerEquals, compareFoodLocations };

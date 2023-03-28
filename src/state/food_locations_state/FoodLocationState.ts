@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { compareFoodLocations } from '../../helpers/equalityHeaderCheck';
 
 class FoodLocationState {
   pathToFile: string;
@@ -17,11 +18,20 @@ class FoodLocationState {
       if (data.length == 0) {
         fs.writeFile(this.fullPath, JSON.stringify(foodLocations));
       } else {
-        console.log('Food locations:');
-        console.log(foodLocations);
-        console.log('read data');
-        console.log(data);
-        fs.writeFile(this.fullPath, JSON.stringify(foodLocations));
+        const newFilteredData = foodLocations.filter((newFoodLocation) => {
+          const sameValue = data.filter((oldFoodLocation) =>
+            compareFoodLocations(newFoodLocation, oldFoodLocation)
+          );
+          if (sameValue.length == 0) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        if (newFilteredData.length > 0) {
+          data.push(...newFilteredData);
+          fs.writeFile(this.fullPath, JSON.stringify(data));
+        }
       }
     });
   }
