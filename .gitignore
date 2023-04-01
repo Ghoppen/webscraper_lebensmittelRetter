@@ -2,3 +2,4 @@ node_modules
 dist
 .env
 state/location_state.json
+/src/state/location_state.json
