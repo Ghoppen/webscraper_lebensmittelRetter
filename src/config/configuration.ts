@@ -13,4 +13,10 @@ const user_configuration = {
   password: process.env.PASSWORD as string,
 };
 
-export { url_configuration, user_configuration };
+const email_configuration = {
+  user: process.env.MAIL_USER as string,
+  password: process.env.MAIL_PASSWORD as string,
+  recipient: process.env.MAIL_RECIPIENT as string,
+};
+
+export { url_configuration, user_configuration, email_configuration };

@@ -10,10 +10,15 @@ async function login(loginPage: Page) {
   const USERNAME_SELECTOR = '#username-4';
   const PASSWORD_SELECTOR = '#user_password-4';
   const LOGIN_BUTTON_SELECTOR = '#um-submit-btn';
-  await loginPage.waitForLoadState('networkidle');
 
-  await loginPage.type(USERNAME_SELECTOR, user_configuration.name);
-  await loginPage.type(PASSWORD_SELECTOR, user_configuration.password);
+  const usernameField = await loginPage.$(USERNAME_SELECTOR);
+  const passwordField = await loginPage.$(PASSWORD_SELECTOR);
+
+  await usernameField?.type(user_configuration.name);
+  await passwordField?.type(user_configuration.password);
+
+  //await loginPage.type(USERNAME_SELECTOR, );
+  //await loginPage.type(PASSWORD_SELECTOR, user_configuration.password);
 
   await loginPage.click(LOGIN_BUTTON_SELECTOR);
 

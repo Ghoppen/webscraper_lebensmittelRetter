@@ -13,10 +13,13 @@ class FoodLocationState {
     this.fullPath = path.join(this.pathToFile, this.filename);
   }
 
-  evaluateState(foodLocations: FoodLocationData[]) {
-    this.readFile().then((data) => {
+  evaluateState(
+    foodLocations: FoodLocationData[]
+  ): Promise<FoodLocationData[]> {
+    return this.readFile().then((data) => {
       if (data.length == 0) {
         fs.writeFile(this.fullPath, JSON.stringify(foodLocations));
+        return data;
       } else {
         const newFilteredData = foodLocations.filter((newFoodLocation) => {
           const sameValue = data.filter((oldFoodLocation) =>
@@ -32,6 +35,7 @@ class FoodLocationState {
           data.push(...newFilteredData);
           fs.writeFile(this.fullPath, JSON.stringify(data));
         }
+        return newFilteredData;
       }
     });
   }
